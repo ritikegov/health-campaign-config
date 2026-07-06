@@ -5,20 +5,20 @@ ServiceMaps:
     - topic: transformer-producer-referral-index-v1-topic
       configKey: INDEX
       indexes:
-        - name: referral-index-v1
-          type: referral
-          id: $.referral.id
+        - name: referral-management-index-v1
+          type: referrals
+          id: $.id
           isBulk: true
           jsonPath: $
           customJsonMapping:
-            indexMapping: { "Data": { } }
+            indexMapping: { "Data": {} }
             fieldMapping:
               - inJsonPath: $
                 outJsonPath: $.Data
-          timeStampField: $.referral.auditDetails.createdTime
+          timeStampField: $.createdTime
         - name: user-sync-index-v1
           type: users
-          id: $.referral.id,$.referral.tenantId
+          id: $.id
           isBulk: true
           jsonPath: $
           customJsonMapping:
@@ -54,10 +54,6 @@ ServiceMaps:
                 outJsonPath: $.Data.projectTypeId
               - inJsonPath: $.projectName
                 outJsonPath: $.Data.projectName
-              - inJsonPath: $.campaignNumber
-                outJsonPath: $.Data.campaignNumber
-              - inJsonPath: $.campaignId
-                outJsonPath: $.Data.campaignId  
           timeStampField: $.referral.auditDetails.lastModifiedTime
 
     - topic: delete-referral-topic
@@ -116,18 +112,6 @@ ServiceMaps:
                 outJsonPath: $.Data.userAddress
               - inJsonPath: $.additionalDetails
                 outJsonPath: $.Data.additionalDetails
-              - inJsonPath: $.projectId
-                outJsonPath: $.Data.projectId
-              - inJsonPath: $.projectType
-                outJsonPath: $.Data.projectType
-              - inJsonPath: $.projectTypeId
-                outJsonPath: $.Data.projectTypeId
-              - inJsonPath: $.projectName
-                outJsonPath: $.Data.projectName
-              - inJsonPath: $.campaignNumber
-                outJsonPath: $.Data.campaignNumber
-              - inJsonPath: $.campaignId
-                outJsonPath: $.Data.campaignId  
           timeStampField: $.sideEffect.auditDetails.lastModifiedTime
 
     - topic: delete-side-effect-topic

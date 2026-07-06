@@ -11,7 +11,8 @@ ServiceMaps:
           isBulk: true
           jsonPath: $
           customJsonMapping:
-            indexMapping: { "Data": { } }
+            indexMapping:
+              Data: {}
             fieldMapping:
               - inJsonPath: $
                 outJsonPath: $.Data
@@ -22,8 +23,11 @@ ServiceMaps:
           isBulk: true
           jsonPath: $
           customJsonMapping:
-            indexMapping: { "Data": { } }
+            indexMapping:
+              Data: { additionalDetails: {} }
             fieldMapping:
+              - inJsonPath: $.id
+                outJsonPath: $.Data.stockId
               - inJsonPath: $.createdBy
                 outJsonPath: $.Data.syncedUserId
               - inJsonPath: $.userName
@@ -44,24 +48,13 @@ ServiceMaps:
                 outJsonPath: $.Data.taskDates
               - inJsonPath: $.syncedDate
                 outJsonPath: $.Data.syncedDate
-              - inJsonPath: $.userAddress
-                outJsonPath: $.Data.userAddress
-              - inJsonPath: $.additionalDetails
-                outJsonPath: $.Data.additionalDetails
-              - inJsonPath: $.projectId
-                outJsonPath: $.Data.projectId
-              - inJsonPath: $.projectType
-                outJsonPath: $.Data.projectType
-              - inJsonPath: $.projectTypeId
-                outJsonPath: $.Data.projectTypeId
-              - inJsonPath: $.projectName
-                outJsonPath: $.Data.projectName
               - inJsonPath: $.campaignNumber
                 outJsonPath: $.Data.campaignNumber
               - inJsonPath: $.campaignId
-                outJsonPath: $.Data.campaignId              
+                outJsonPath: $.Data.campaignId
+              - inJsonPath: $.additionalDetails.cycleIndex
+                outJsonPath: $.Data.additionalDetails.cycleIndex
           timeStampField: $.createdTime
-
     - topic: transformer-producer-stock-recon-index-v1-topic
       configKey: INDEX
       indexes:
@@ -71,9 +64,9 @@ ServiceMaps:
           isBulk: true
           jsonPath: $
           customJsonMapping:
-            indexMapping: { "Data": { } }
+            indexMapping:
+              Data: {}
             fieldMapping:
               - inJsonPath: $
                 outJsonPath: $.Data
           timeStampField: $.stockReconciliation.auditDetails.createdTime
-
