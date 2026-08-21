@@ -7,7 +7,7 @@ ServiceMaps:
       indexes:
         - name: project-task-index-v1
           type: tasks
-          id: $.id
+          id: $.clientReferenceId,$.projectBeneficiaryClientReferenceId,$.tenantId
           isBulk: true
           jsonPath: $
           customJsonMapping:
@@ -24,26 +24,30 @@ ServiceMaps:
           customJsonMapping:
             indexMapping: { "Data": {} }
             fieldMapping:
-              - inJsonPath: $.lastModifiedBy
+              - inJsonPath: $.createdBy
                 outJsonPath: $.Data.syncedUserId
-              - inJsonPath: $.createdTime
-                outJsonPath: $.Data.clientCreatedTime
               - inJsonPath: $.userName
                 outJsonPath: $.Data.syncedUserName
               - inJsonPath: $.role
                 outJsonPath: $.Data.role
               - inJsonPath: $.boundaryHierarchy
                 outJsonPath: $.Data.boundaryHierarchy
+              - inJsonPath: $.createdTime
+                outJsonPath: $.Data.clientCreatedTime
               - inJsonPath: $.syncedTime
                 outJsonPath: $.Data.createdTime
               - inJsonPath: $.syncedTimeStamp
                 outJsonPath: $.Data.syncedTimeStamp
               - inJsonPath: $.@timestamp
                 outJsonPath: $.Data.@timestamp
+              - inJsonPath: $.taskDates
+                outJsonPath: $.Data.taskDates
               - inJsonPath: $.syncedDate
                 outJsonPath: $.Data.syncedDate
-              - inJsonPath: $.nameOfUser
-                outJsonPath: $.Data.syncedNameOfUser
+              - inJsonPath: $.userAddress
+                outJsonPath: $.Data.userAddress
+              - inJsonPath: $.additionalDetails
+                outJsonPath: $.Data.additionalDetails
               - inJsonPath: $.projectId
                 outJsonPath: $.Data.projectId
               - inJsonPath: $.projectType
@@ -52,4 +56,8 @@ ServiceMaps:
                 outJsonPath: $.Data.projectTypeId
               - inJsonPath: $.projectName
                 outJsonPath: $.Data.projectName
+              - inJsonPath: $.campaignNumber
+                outJsonPath: $.Data.campaignNumber
+              - inJsonPath: $.campaignId
+                outJsonPath: $.Data.campaignId  
           timeStampField: $.createdTime

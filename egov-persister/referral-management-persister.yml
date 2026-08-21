@@ -52,13 +52,7 @@ serviceMaps:
       transactionCodeJsonPath: $.clientReferenceId
       auditAttributeBasePath: $.*
       queryMaps:
-        # The four link columns were overwritten unconditionally, so an update that omits them wiped
-        # the links off an already-persisted row. taskClientReferenceId is NOT NULL
-        # (V20231010120100), so that omission raised 23502 and the record was parked. COALESCE keeps
-        # the stored link when the payload does not carry one. Trade-off: a link can no longer be
-        # cleared to NULL through this topic, which is correct - nothing legitimately unlinks a side
-        # effect from its task or beneficiary.
-        - query: UPDATE SIDE_EFFECT SET tenantId = ?, taskId = COALESCE(CAST(? AS varchar), taskId), taskClientReferenceId = COALESCE(CAST(? AS varchar), taskClientReferenceId), projectBeneficiaryId = COALESCE(CAST(? AS varchar), projectBeneficiaryId), projectBeneficiaryClientReferenceId = COALESCE(CAST(? AS varchar), projectBeneficiaryClientReferenceId), symptoms = ?, additionalDetails = ?, lastModifiedBy = ?, lastModifiedTime = ?, clientLastModifiedBy = ?, clientLastModifiedTime = ?, rowVersion = ?, isDeleted = ? WHERE ID = ?;
+        - query: UPDATE SIDE_EFFECT SET tenantId = ?, taskId = ?, taskClientReferenceId = ?, projectBeneficiaryId = ?, projectBeneficiaryClientReferenceId = ?, symptoms = ?, additionalDetails = ?, lastModifiedBy = ?, lastModifiedTime = ?, clientLastModifiedBy = ?, clientLastModifiedTime = ?, rowVersion = ?, isDeleted = ? WHERE ID = ?;
           basePath: $.*
           jsonMaps:
             - jsonPath: $.*.tenantId
@@ -158,12 +152,7 @@ serviceMaps:
       transactionCodeJsonPath: $.clientReferenceId
       auditAttributeBasePath: $.*
       queryMaps:
-        # Same unconditional-overwrite defect as SIDE_EFFECT above: an update that omits
-        # projectBeneficiaryId / projectBeneficiaryClientReferenceId (legitimate post-unbundle, where
-        # only one of the pair is resolvable) NULLed both on an already-persisted row and orphaned the
-        # referral. COALESCE every link column so an omitted link preserves the stored value.
-        # recipientType, reasons and additionalDetails are payload, not links, and stay unconditional.
-        - query: UPDATE REFERRAL SET tenantId = ?, projectBeneficiaryId = COALESCE(CAST(? AS varchar), projectBeneficiaryId), projectBeneficiaryClientReferenceId = COALESCE(CAST(? AS varchar), projectBeneficiaryClientReferenceId),  projectId = COALESCE(CAST(? AS varchar), projectId), referrerId = COALESCE(CAST(? AS varchar), referrerId), recipientId = COALESCE(CAST(? AS varchar), recipientId), recipientType = ?, reasons = ?, additionalDetails = ?, sideEffectId = COALESCE(CAST(? AS varchar), sideEffectId), sideEffectClientReferenceId = COALESCE(CAST(? AS varchar), sideEffectClientReferenceId), lastModifiedBy = ?, lastModifiedTime = ?, clientLastModifiedBy = ?, clientLastModifiedTime = ?, rowVersion = ?, isDeleted = ? WHERE ID = ?;
+        - query: UPDATE REFERRAL SET tenantId = ?, projectBeneficiaryId = ?, projectBeneficiaryClientReferenceId = ?, projectId = ?, referrerId = ?, recipientId = ?, recipientType = ?, reasons = ?, additionalDetails = ?, sideEffectId = ?, sideEffectClientReferenceId = ?, lastModifiedBy = ?, lastModifiedTime = ?, clientLastModifiedBy = ?, clientLastModifiedTime = ?, rowVersion = ?, isDeleted = ? WHERE ID = ?;
           basePath: $.*
           jsonMaps:
             - jsonPath: $.*.tenantId
@@ -224,7 +213,7 @@ serviceMaps:
       transactionCodeJsonPath: $.clientReferenceId
       auditAttributeBasePath: $.*
       queryMaps:
-        - query: INSERT INTO hf_referral(id, clientReferenceId, tenantId, projectid, projectFacilityId, symptom, symptomsurveyid, beneficiaryid, referralcode, nationallevelid, localitycode, additionalDetails, createdBy, createdTime, lastModifiedBy, lastModifiedTime, clientCreatedBy, clientCreatedTime, clientLastModifiedBy, clientLastModifiedTime, rowVersion, isDeleted) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+        - query: INSERT INTO hf_referral(id, clientReferenceId, tenantId, projectid, projectFacilityId, symptom, symptomsurveyid, beneficiaryid, referralcode, nationallevelid, additionalDetails, createdBy, createdTime, lastModifiedBy, lastModifiedTime, clientCreatedBy, clientCreatedTime, clientLastModifiedBy, clientLastModifiedTime, rowVersion, isDeleted) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
           basePath: $.*
           jsonMaps:
             - jsonPath: $.*.id
@@ -237,7 +226,6 @@ serviceMaps:
             - jsonPath: $.*.beneficiaryId
             - jsonPath: $.*.referralCode
             - jsonPath: $.*.nationalLevelId
-            - jsonPath: $.*.localityCode
             - jsonPath: $.*.additionalFields
               type: JSON
               dbType: JSONB

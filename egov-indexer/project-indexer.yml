@@ -22,7 +22,7 @@ ServiceMaps:
       indexes:
         - name: project-beneficiary-index-v1
           type: project-beneficiary
-          id: $.id
+          id: $.clientReferenceId,$.beneficiaryClientReferenceId,$.tenantId
           isBulk: true
           jsonPath: $.*
           timeStampField: $.auditDetails.createdTime
@@ -32,7 +32,7 @@ ServiceMaps:
       indexes:
         - name: project-beneficiary-index-v1
           type: project-beneficiary
-          id: $.id
+          id: $.clientReferenceId,$.beneficiaryClientReferenceId,$.tenantId
           isBulk: true
           jsonPath: $.*
           timeStampField: $.auditDetails.lastModifiedTime
@@ -42,7 +42,7 @@ ServiceMaps:
       indexes:
         - name: project-beneficiary-index-v1
           type: project-beneficiary
-          id: $.id
+          id: $.clientReferenceId,$.beneficiaryClientReferenceId,$.tenantId
           isBulk: true
           jsonPath: $.*
           timeStampField: $.auditDetails.lastModifiedTime
